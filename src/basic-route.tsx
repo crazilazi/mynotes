@@ -45,7 +45,7 @@ const BasicRoute: React.FC = (props) => {
         <div id="outer-container" >
             <SideBarMenu pageWrapId="page-wrap" outerContainerId="outer-container" ></SideBarMenu>
             <main id="page-wrap">
-                <div className="container">
+                <div className="container-fluid" style={{ 'width': '90%' }}>
                     <Router>
                         <Switch>
                             <Route exact path="/auth" component={Login} />
