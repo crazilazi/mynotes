@@ -16,7 +16,8 @@ const AddNote: React.FC = (props) => {
         console.log(title);
     }
 
-    const addNote = async () => {
+    const addNote = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
         let ethereum = window.ethereum;
         const selectedAddress = ethereum.selectedAddress;
         let keep = await mySmartContract.getContract();
@@ -30,7 +31,25 @@ const AddNote: React.FC = (props) => {
     }
     return (
         <React.Fragment>
-            <div className="col-sm-3">
+            <div className="row">
+                <div className="col-sm-2"></div>
+                <div className="col-sm-8">
+                    <form onSubmit={(event) => addNote(event)}>
+                        <div className="form-group">
+                            <label htmlFor="title" className="float-left">Title</label>
+                            <input type="text" placeholder="title" required className="form-control" id="title" value={title} onChange={(event) => onChangeTitle(event)}></input>
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="comment" className="float-left">Write your note</label>
+                            <textarea className="form-control" required placeholder="write notes here" onChange={(event) => onChangeNote(event)} value={notes} rows={5} id="comment"></textarea>
+                        </div>
+
+                        <button type="submit" className="btn btn-primary float-right" >Add Notes</button>
+                    </form>
+                </div>
+                <div className="col-sm-2"></div>
+            </div>
+            {/* <div className="col-sm-3">
                 <div className="form-group">
                     <input type="text" placeholder="Note title" required className="form-control" id="title" value={title} onChange={(event) => onChangeTitle(event)}></input>
                 </div>
@@ -42,7 +61,7 @@ const AddNote: React.FC = (props) => {
             </div>
             <div className="col-sm-12">
                 <button type="button" className="btn btn-primary float-right" onClick={() => addNote()}>Add Notes</button>
-            </div>
+            </div> */}
         </React.Fragment>
     );
 };
