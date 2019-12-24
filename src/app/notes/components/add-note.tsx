@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
-import { mySmartContract } from '../../lib/getmesmartcontract';
+import React, { useState, useContext } from 'react';
+import { Context } from '../../store/store';
 
 const AddNote: React.FC = (props) => {
     // state
     const [notes, setNote] = useState('');
     const [title, setTitle] = useState('');
+    const { state, dispatch } = useContext(Context);
 
     const onChangeNote = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
         setNote(event.target.value);
@@ -19,7 +20,7 @@ const AddNote: React.FC = (props) => {
     const addNote = async () => {
         let ethereum = window.ethereum;
         const selectedAddress = ethereum.selectedAddress;
-        let keep = await mySmartContract.getContract();
+        let keep = state.smartContract;
         await keep.methods.saveNote(notes, title, Date.now()).send({ from: selectedAddress })
             .once('receipt', (receipt: any) => {
                 console.log(receipt);

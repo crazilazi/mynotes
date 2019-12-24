@@ -1,16 +1,21 @@
-import React from "react";
+import React, { useReducer } from "react";
 import {
     BrowserRouter as Router,
     Switch,
     Route,
+    Link,
+    Redirect
 } from "react-router-dom";
 import Home from "./app/home/components/home";
-import SideBarMenu from "./app/menu/sidebar/components";
 import Login from "./app/Auth/login/components/login";
 import AddNote from "./app/notes/components/add-note";
 import NotFound from "./app/notfound/components/notfound";
 import ViewNote from "./app/notes/components/view-note";
-
+import { slide as Menu } from 'react-burger-menu';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHome, faCartPlus, faBoxOpen, faLockOpen } from '@fortawesome/free-solid-svg-icons';
+import './menu.css';
+import { reducer, initialState, Context } from "./app/store/store";
 let currentAccount: any = null;
 const checkLogin = async () => {
     let ethereum = window.ethereum;
@@ -40,26 +45,28 @@ function handleAccountsChanged(accounts: any) {
 };
 
 const BasicRoute: React.FC = (props) => {
+    const [state, dispatch] = useReducer(reducer, initialState);
+
     return (
-
-        <div id="outer-container" >
-            <SideBarMenu pageWrapId="page-wrap" outerContainerId="outer-container" ></SideBarMenu>
-            <main id="page-wrap">
+        <Context.Provider value={{ state, dispatch }}>
+            <Router>
+                <Menu noOverlay={false} disableOverlayClick={false} isOpen={false} >
+                    <Link className="menu-item" to="/"><FontAwesomeIcon icon={faHome} /> Home </Link>
+                    <Link className="menu-item" to="/note/add"> <FontAwesomeIcon icon={faCartPlus} /> Add Notes </Link>
+                    <Link className="menu-item" to="/note"><FontAwesomeIcon icon={faBoxOpen} /> View Notes </Link>
+                    <Link className="menu-item" to="/Auth"><FontAwesomeIcon icon={faLockOpen} /> Log In </Link>
+                </Menu>
                 <div className="container-fluid" style={{ 'width': '90%' }}>
-                    <Router>
-                        <Switch>
-                            <Route exact path="/auth" component={Login} />
-                            <Route exact path="/" component={Home} />
-                            <Route exact path="/note" component={ViewNote} />
-                            <Route exact path="/note/Add" component={AddNote} />
-                            <Route component={NotFound}></Route>
-                        </Switch>
-                    </Router>
+                    <Switch>
+                        <Route exact path="/auth" component={Login} />
+                        <Route exact path="/" render={() => state.isAuthenticated ? <Home /> : <Redirect to={{ pathname: "/auth" }} />} />
+                        <Route exact path="/note" render={() => state.isAuthenticated ? <ViewNote /> : <Redirect to={{ pathname: "/auth" }} />} />
+                        <Route exact path="/note/Add" render={() => state.isAuthenticated ? <AddNote /> : <Redirect to={{ pathname: "/login" }} />} />
+                        <Route component={NotFound}></Route>
+                    </Switch>
                 </div>
-            </main>
-        </div >
-
-
+            </Router >
+        </Context.Provider>
     );
 };
 
