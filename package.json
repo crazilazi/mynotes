@@ -21,6 +21,7 @@
     "react-scripts": "3.0.1",
     "truffle": "^5.1.1",
     "typescript": "3.5.3",
+    "use-global-hook": "^0.1.12",
     "web3": "^1.2.4"
   },
   "devDependencies": {
@@ -31,7 +32,7 @@
     "@types/react-burger-menu": "^2.6.0",
     "@types/react-dom": "16.8.5",
     "@types/react-router-dom": "^5.1.2",
-    "@types/web3": "^1.2.2",
+    "@types/use-global-hook": "^0.1.2",
     "tslint-config-prettier": "^1.18.0",
     "tslint-plugin-prettier": "^2.0.1",
     "tslint-react": "^4.1.0"
@@ -40,7 +41,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "compile": "truffle compile"
   },
   "eslintConfig": {
     "extends": "react-app"

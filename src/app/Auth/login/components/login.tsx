@@ -1,10 +1,48 @@
 import React from 'react';
 import './login.css';
-import { mySmartContract } from '../../../lib/getmesmartcontract';
+import Web3 from 'web3';
+import Keep from '../../../../abis/Keep.json';
+import useGlobal from '../../../store/global-store';
 const Login: React.FC = (props) => {
 
-    const login = async () => {
-        await mySmartContract.login();
+    const [state, actions] = useGlobal();
+
+    const login = () => {
+        console.log(state.user);
+        actions.setUser({ isAuthenticated: true, userAddress: undefined, smartContract: undefined });
+        console.log(state.user);
+        // let ethereum = window.ethereum;
+        // if (!ethereum || !ethereum.isMetaMask) {
+        //     console.error('Please install MetaMask.');
+        //     throw new Error('Please install MetaMask.');
+        // }
+        // try {
+        //     // const accounts = await ethereum.send('eth_requestAccounts');
+        //     ethereum.enable()
+        //         .then((accounts: any) => {
+        //             console.log('ether accounts', accounts);
+        //             const networkData = Keep.networks[ethereum.networkVersion];
+        //             const web3 = new Web3(ethereum);
+        //             let user: IUser = {
+        //                 isAuthenticated: true,
+        //                 userAddress: accounts[0],
+        //                 smartContract: new web3.eth.Contract(Keep['abi'], networkData.address)
+        //             }
+        //             actions.setUser({ isAuthenticated: true, userAddress: undefined, smartContract: undefined });
+        //             console.log(state.user);
+        //         })
+        //         .catch((error: any) => {
+        //             // Handle error. Likely the user rejected the login
+        //             console.error(error)
+        //         })
+
+        // } catch (error) {
+        //     if (error.code === 4001) { // EIP 1193 userRejectedRequest error
+        //         console.log('Please connect to MetaMask.');
+        //     } else {
+        //         console.error(error)
+        //     }
+        // }
     }
 
     return (

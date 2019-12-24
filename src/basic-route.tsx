@@ -10,7 +10,7 @@ import Login from "./app/Auth/login/components/login";
 import AddNote from "./app/notes/components/add-note";
 import NotFound from "./app/notfound/components/notfound";
 import ViewNote from "./app/notes/components/view-note";
-
+import useGlobal from './app/store/global-store';
 let currentAccount: any = null;
 const checkLogin = async () => {
     let ethereum = window.ethereum;
@@ -40,6 +40,8 @@ function handleAccountsChanged(accounts: any) {
 };
 
 const BasicRoute: React.FC = (props) => {
+    const [state, actions] = useGlobal();
+    { console.log(state.user) }
     return (
 
         <div id="outer-container" >
@@ -51,7 +53,7 @@ const BasicRoute: React.FC = (props) => {
                             <Route exact path="/auth" component={Login} />
                             <Route exact path="/" component={Home} />
                             <Route exact path="/note" component={ViewNote} />
-                            <Route exact path="/note/Add" component={AddNote} />
+                            <Route exact path="/note/Add" render={() => <div>Home</div>} />
                             <Route component={NotFound}></Route>
                         </Switch>
                     </Router>

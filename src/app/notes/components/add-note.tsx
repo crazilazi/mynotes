@@ -1,17 +1,20 @@
 import React, { useState } from 'react';
 import { mySmartContract } from '../../lib/getmesmartcontract';
-
+import useGlobal from '../../store/global-store';
 const AddNote: React.FC = (props) => {
     // state
     const [notes, setNote] = useState('');
     const [title, setTitle] = useState('');
-
+    const [state, actions] = useGlobal();
     const onChangeNote = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+        console.log(state.user);
+        actions.setUser({ isAuthenticated: true, userAddress: undefined, smartContract: undefined });
         setNote(event.target.value);
         console.log(notes);
     }
 
     const onChangeTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
+        console.log(state.user);
         setTitle(event.target.value);
         console.log(title);
     }
@@ -29,6 +32,12 @@ const AddNote: React.FC = (props) => {
             })
 
     }
+
+    const testAdd = (event: any) => {
+        console.log(state.user);
+        actions.setUser({ isAuthenticated: true, userAddress: undefined, smartContract: undefined });
+        console.log(state.user);
+    }
     return (
         <React.Fragment>
             <div className="row">
@@ -44,7 +53,7 @@ const AddNote: React.FC = (props) => {
                             <textarea className="form-control" required placeholder="write notes here" onChange={(event) => onChangeNote(event)} value={notes} rows={5} id="comment"></textarea>
                         </div>
 
-                        <button type="submit" className="btn btn-primary float-right" >Add Notes</button>
+                        <button type="button" onClick={(event) => testAdd(event)} className="btn btn-primary float-right" >Add Notes</button>
                     </form>
                 </div>
                 <div className="col-sm-2"></div>
