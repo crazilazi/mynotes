@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { mySmartContract } from '../../lib/getmesmartcontract';
+import React, { useState, useEffect, useContext } from 'react';
+import { Context } from '../../store/store';
 export interface IContract {
   id: number;
   user: string;
@@ -8,16 +8,17 @@ export interface IContract {
   createdOn: number;
 }
 const ViewNote: React.FC = (props) => {
-
+  const { state, dispatch } = useContext(Context);
   const initialState: IContract[] = [];
   const [mynotes, setmynote] = useState(initialState);
 
   useEffect(() => {
+    console.log(state);
     getNotesdata();
   }, []);
 
   const getNotesdata = async () => {
-    let Keep = await mySmartContract.getContract();
+    let Keep = state.smartContract;
     let noteCount = await Keep.methods.notesCount().call();
     let temp = [];
     for (var i = 1; i <= noteCount; i++) {
