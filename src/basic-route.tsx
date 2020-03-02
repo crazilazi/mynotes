@@ -15,7 +15,12 @@ import { slide as Menu } from 'react-burger-menu';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome, faCartPlus, faBoxOpen, faLockOpen } from '@fortawesome/free-solid-svg-icons';
 import './menu.css';
-import { reducer, initialState, Context } from "./app/store/store";
+import { reducer, initialState, Context, ComponentAction, types } from "./app/store/store";
+// import SideNav, { Toggle, Nav, NavItem, NavIcon, NavText } from '@trendmicro/react-sidenav';
+
+// Be sure to include styles at some point, probably during your bootstraping
+// import '@trendmicro/react-sidenav/dist/react-sidenav.css';
+import { Navbar, Nav } from "react-bootstrap";
 let currentAccount: any = null;
 const checkLogin = async () => {
     let ethereum = window.ethereum;
@@ -47,21 +52,39 @@ function handleAccountsChanged(accounts: any) {
 const BasicRoute: React.FC = (props) => {
     const [state, dispatch] = useReducer(reducer, initialState);
 
+    const isMenuOpen = function (state: any) {
+        console.log(state.isOpen);
+        let action: ComponentAction = {
+            type: types.MENUSTATE,
+            payload: { isMenuOpen: state.isOpen }
+        }
+        // dispatch action to store
+        dispatch(action);
+        return state.isOpen;
+    };
+
     return (
         <Context.Provider value={{ state, dispatch }}>
             <Router>
-                <Menu noOverlay={false} disableOverlayClick={false} isOpen={false} >
-                    <Link className="menu-item" to="/"><FontAwesomeIcon icon={faHome} /> Home </Link>
-                    <Link className="menu-item" to="/note/add"> <FontAwesomeIcon icon={faCartPlus} /> Add Notes </Link>
-                    <Link className="menu-item" to="/note"><FontAwesomeIcon icon={faBoxOpen} /> View Notes </Link>
-                    <Link className="menu-item" to="/Auth"><FontAwesomeIcon icon={faLockOpen} /> Log In </Link>
-                </Menu>
-                <div className="container-fluid" style={{ 'width': '90%' }}>
+                <header>
+                    <Navbar bg="dark" variant="dark">
+                        <Nav className="mr-auto">
+                            <Link className="nav-link" to="/"><FontAwesomeIcon icon={faHome} /> Home </Link>
+                            <Link className="nav-link" to="/note/add"> <FontAwesomeIcon icon={faCartPlus} /> Add Notes </Link>
+                            <Link className="nav-link" to="/note"><FontAwesomeIcon icon={faBoxOpen} /> View Notes </Link>
+                            <Link className="nav-link" to="/Auth"><FontAwesomeIcon icon={faLockOpen} /> Log In </Link>
+                        </Nav>
+
+                    </Navbar>
+
+                </header>
+                <div className="container mt-3" style={{ maxWidth: '96%' }}>
+
                     <Switch>
-                        <Route exact path="/auth" component={Login} />
+                        <Route exact path="/auth" render={() => state.isAuthenticated ? <Home /> : <Login />} />
                         <Route exact path="/" render={() => state.isAuthenticated ? <Home /> : <Redirect to={{ pathname: "/auth" }} />} />
                         <Route exact path="/note" render={() => state.isAuthenticated ? <ViewNote /> : <Redirect to={{ pathname: "/auth" }} />} />
-                        <Route exact path="/note/Add" render={() => state.isAuthenticated ? <AddNote /> : <Redirect to={{ pathname: "/login" }} />} />
+                        <Route exact path="/note/Add" render={() => state.isAuthenticated ? <AddNote /> : <Redirect to={{ pathname: "/auth" }} />} />
                         <Route component={NotFound}></Route>
                     </Switch>
                 </div>

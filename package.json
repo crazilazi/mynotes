@@ -18,7 +18,7 @@
     "react-burger-menu": "^2.6.12",
     "react-dom": "^16.12.0",
     "react-router-dom": "^5.1.2",
-    "react-scripts": "3.0.1",
+    "react-scripts": "^3.3.0",
     "truffle": "^5.1.1",
     "typescript": "3.5.3",
     "web3": "^1.2.4"
